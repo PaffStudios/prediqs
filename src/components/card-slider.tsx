@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   EmblaCarouselType,
-  EmblaEventType,
 } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
 import { ArrowDownCircle, ArrowUpCircle, BarChart3, CircleArrowLeft, Star, Users } from 'lucide-react'

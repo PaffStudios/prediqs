@@ -1,7 +1,6 @@
 "use client"
 import CardWallet from "@/components/card-slider"
 import Ripple from "@/components/ui/ripple"
-import { useState } from "react"
 
 export default function DiscoverPage()
 {
