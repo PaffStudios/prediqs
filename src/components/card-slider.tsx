@@ -4,10 +4,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   EmblaCarouselType,
   EmblaEventType,
-  EmblaOptionsType,
 } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
-import { ArrowDownCircle, ArrowUpCircle, BarChart3, ChevronDown, CircleArrowLeft, Star, Users } from 'lucide-react'
+import { ArrowDownCircle, ArrowUpCircle, BarChart3, CircleArrowLeft, Star, Users } from 'lucide-react'
 import { AnimatePresence, motion } from "framer-motion"
 import { Progress } from "./ui/progress"
 import Image from "next/image"
@@ -74,10 +73,9 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
   }, [])
 
   const tweenScale = useCallback(
-    (emblaApi: EmblaCarouselType, eventName?: EmblaEventType) => {
+    (emblaApi: EmblaCarouselType) => {
       const engine = emblaApi.internalEngine()
       const scrollProgress = emblaApi.scrollProgress()
-      const slidesInView = emblaApi.slidesInView()
 
       emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
         let diffToTarget = scrollSnap - scrollProgress

@@ -20,7 +20,7 @@ export default function Footer() {
               <div className="w-8 h-8 bg-blue-500 rounded-md" />
               <span className="text-2xl font-bold">PREDIQS</span>
             </div>
-            <p className="text-slate-400 max-w-xs">The world's most advanced prediction market platform.</p>
+            <p className="text-slate-400 max-w-xs">The worlds most advanced prediction market platform.</p>
           </div>
 
           {/* Navigation */}

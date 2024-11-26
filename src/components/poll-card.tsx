@@ -24,7 +24,7 @@ export function PollCard({ id, title, image, rewardRate, movement, isPositive }:
 
   useEffect(() => {
     if(firstRender) setFirstRender(false)
-  })
+  }, [firstRender])
 
 const data = Array.from({ length: 15 }, () => ({
   uv: faker.finance.amount({ min: 4000, max: 9000 }),

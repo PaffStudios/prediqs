@@ -1,5 +1,4 @@
 "use client"
-import Leaderboard from "@/components/leaderboard";
 import Podiums from "@/components/ranking-podiums";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
