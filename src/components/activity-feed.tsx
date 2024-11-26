@@ -13,32 +13,32 @@ interface Item {
 export default function ActivityFeed() {
   let notifications = [
     {
-      name: "Payment received",
-      description: "Magic UI",
+      name: "BTC deposit",
+      description: "1.234 BTC",
       time: "15m ago",
-   
+
       icon: "💸",
       color: "#00C9A7",
     },
     {
-      name: "User signed up",
-      description: "Magic UI",
+      name: "ETH withdrawal",
+      description: "0.9876 ETH",
       time: "10m ago",
-      icon: "👤",
+      icon: "📈",
       color: "#FFB800",
     },
     {
-      name: "New message",
-      description: "Magic UI",
+      name: "BTC/USD trade",
+      description: "10,000 USD",
       time: "5m ago",
-      icon: "💬",
+      icon: "💸",
       color: "#FF3D71",
     },
     {
-      name: "New event",
-      description: "Magic UI",
+      name: "DOGE deposit",
+      description: "10,000 DOGE",
       time: "2m ago",
-      icon: "🗞️",
+      icon: "🐕",
       color: "#1E86FF",
     },
   ];
@@ -49,13 +49,13 @@ export default function ActivityFeed() {
     return (
       <figure
         className={cn(
-          "relative mx-auto min-h-fit w-full max-w-[60%] cursor-pointer overflow-hidden rounded-2xl p-4",
+          "relative mx-auto min-h-fit w-full cursor-pointer overflow-hidden rounded-2xl p-4",
           // animation styles
           "transition-all duration-200 ease-in-out hover:scale-[103%]",
           // light styles
           "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
           // dark styles
-          "transform-gpu dark:bg-transparent dark:backdrop-blur-md dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
+          "transform-gpu dark:bg-transparent dark:backdrop-blur-md dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] hover:[box-shadow:0_-20px_80px_-20px_#ffffff3f_inset]",
         )}
       >
         <div className="flex flex-row items-center gap-3">
@@ -83,7 +83,7 @@ export default function ActivityFeed() {
   };
 
   return (
-    <div>
+    <div className="overflow-hidden max-h-full">
       <AnimatedList>
         {notifications.map((item, idx) => (
           <Notification {...item} key={idx} />

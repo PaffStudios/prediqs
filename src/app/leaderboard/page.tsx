@@ -172,7 +172,7 @@ function LeaderboardEntry({ index, rank, username, value, avatar }: {
         initial={{ opacity: 0, y:-20}}
         animate={{ opacity:1, y:0 }}
         transition={{duration:0.4, delay:index * 0.05 +0.6}}
-        className="flex items-center justify-between py-3 mx-44 p-4 rounded-md bg-zinc-900 bg-opacity-50">
+        className="flex items-center justify-between py-3 mx-auto w-full px-4 md:w-[75%] p-4 rounded-md bg-zinc-900 bg-opacity-50">
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="h-8 w-8">

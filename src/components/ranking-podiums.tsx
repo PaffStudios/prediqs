@@ -15,7 +15,7 @@ export default function Podiums({ topUsers }: PodiumProps) {
   const [second, first, third] = topUsers
 
   return (
-    <div className="flex justify-center items-end mb-8">
+    <div className="flex justify-center items-end mb-8 w-[80%] mx-auto">
       {/* Second Place */}
       <motion.div
         className="flex flex-col items-center mb-8 mx-2"

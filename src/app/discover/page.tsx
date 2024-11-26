@@ -1,18 +1,28 @@
-import EmblaCarousel from "@/components/embla-carousel"
-import { EmblaOptionsType } from "embla-carousel"
+"use client"
+import CardWallet from "@/components/card-slider"
+import Ripple from "@/components/ui/ripple"
+import { useState } from "react"
 
 export default function DiscoverPage()
 {
-    const SLIDE_COUNT = 25
-    const OPTIONS: EmblaOptionsType = { axis: 'y', align:'center', startIndex: Math.floor(SLIDE_COUNT/2)}
-    const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
+    const [isExpanded, setIsExpanded] = useState(false)
+    const handleWalletDetails = () => {
+        // setIsExpanded(!isExpanded)
+    }
+
     return(
-        <>
-            <div className="h-screen overflow-hidden grid place-items-center">
-                <div className="grid place-items-center ">
-                    <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+        <div className="flex flex-row">
+            <div className={`h-screen ${isExpanded ? "w-1/2" : "w-full"} transition-all duration-300 overflow-hidden grid place-items-center`}>
+                <Ripple/>
+                <div className="w-full overflow-hidden">
+                    <CardWallet handleWalletDetails={handleWalletDetails}/>
                 </div>
             </div>
-        </>
+            <div className={`h-screen ${isExpanded ? "w-1/2" : "w-0"} bg-background transition-all duration-300 grid place-items-center`}>
+                <div className="w-2/3 min-w-[500px] h-2/3 bg-red-300 rounded-xl">
+                    <span>HEY THERE</span>
+                </div>
+            </div>
+        </div>
     )
 }

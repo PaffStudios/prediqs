@@ -46,9 +46,9 @@ const Categories = () => {
 
   return (
     <div className="w-full bg-background py-4">
-      <div className="container mx-auto px-6 flex items-center justify-between relative">
+      <div className="w-[95%] mx-auto px-6 flex items-center justify-between relative">
         <div className='relative h-full flex flex-row w-[calc(100%-220px)]'>
-          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-background to-transparent"></div>
+          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-background to-transparent z-10"></div>
           <div 
             ref={scrollContainerRef}
             className="overflow-x-auto lg:w-full no-scrollbar"
@@ -69,7 +69,7 @@ const Categories = () => {
                       key={index}
                       variant={category.isLive ? "destructive" : "secondary"}
                       size="sm"
-                      className="flex-shrink-0 rounded-full px-4 transition-all duration-200 hover:scale-105"
+                      className="flex-shrink-0 rounded-full px-4 transition-all duration-200 hover:scale-105 bg-transparent backdrop-blur-md [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] hover:[box-shadow:0_-20px_80px_-20px_#ffffff3f_inset]"
                     >
                       {category.isLive ? 
                         <motion.div 
@@ -78,7 +78,7 @@ const Categories = () => {
                           transition={{ repeat: Infinity, duration: 1.5 }}>
                             <div className='rounded-full w-4 aspect-square bg-red-500'></div> 
                         </motion.div> : <></>}
-                      {category.name}
+                      <span className='font-gilroy font-bold select-none'>{category.name}</span>
                     </Button>
                 </motion.div>
               ))}
@@ -86,13 +86,13 @@ const Categories = () => {
           </div>
           <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-background to-transparent"></div>
         </div>
-        <div className="relative ml-4 w-52 flex-shrink-0">
+        <div className="relative ml-4 max-w-72 flex-shrink-0">
           <Input
             type="search"
             placeholder="Search"
             className="w-full pr-8"
           />
-          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground font-gilroy font-bold" />
         </div>
       </div>
     </div>
