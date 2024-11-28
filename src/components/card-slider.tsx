@@ -22,9 +22,26 @@ interface PollCard {
     starred?: boolean
   }
 
+  const titles = ['Will OpenAI release GPT-5 to the public before January 2025?', 
+    'Will Lionel Messi announce his retirement from professional football by the end of 2024??', 
+    'Will the conflict in Gaza see a ceasefire agreement by December 31, 2024?',
+    'Will Novak Djokovic win the Australian Open 2025?',
+    'Will the 2025 World Cup be held in Qatar?',
+    'Will Beyoncé win Album of the Year at the 2025 Grammy Awards?',
+    'Will Apple announce a new AR/VR headset during their 2025 spring event?',
+    'Will the global inflation rate drop below 5% by December 2024?',
+    'Will the Los Angeles Lakers win the NBA Championship in 2025?',
+    'Will Max Verstappen win the 2025 Formula 1 World Championship?',
+    'Will England win the 2025 Ashes series in cricket?',
+    'Will Elon Musk announce a new cryptocurrency by 2025?',
+    'Will an AI-generated song win a major music award by 2025?',
+    'Will a new social media platform surpass TikTok in daily users by 2025?',
+    'Will a major central bank launch its own cryptocurrency by 2025?',
+    'Will Solana become one of the top 3 cryptocurrencies by market cap by 2025?',
+    'Will the total cryptocurrency market cap exceed $5 trillion by 2025?'];
   const polls: PollCard[] = Array.from({ length: 4 }).map((_, i) => ({
     id: String(i + 1),
-    question: faker.lorem.sentence({min:3, max: 6}),
+    question: titles[Math.floor(Math.random() * titles.length)],
     image: faker.image.avatar(),
     chance: faker.number.int({max:100}),
     volume: Number(faker.finance.amount({min:0, max:99})),
@@ -181,21 +198,21 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                     )}
                 </AnimatePresence>
 
-                <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                    <Image
-                    src={poll.image}
-                    alt="Crypto icon"
-                    width={48}
-                    height={48}
-                    className="rounded-full bg-gray-700 p-2"
-                    />
-                    <h2 className="text-sm md:text-lg font-semibold text-white text-nowrap text-ellipsis w-full overflow-hidden">{poll.question.substring(0, 20) + "..."}</h2>
-                </div>
-                <div className="flex flex-col items-end">
-                    <span className="text-2xl font-bold text-white">{poll.chance}%</span>
-                    <span className="text-sm text-gray-400">chance</span>
-                </div>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3 flex-grow w-[60%]">
+                      <Image
+                      src={poll.image}
+                      alt="Crypto icon"
+                      width={48}
+                      height={48}
+                      className="rounded-xl bg-gray-700 p-2"
+                      />
+                      <h2 className="text-sm md:text-lg font-semibold text-white text-nowrap text-ellipsis w-full overflow-hidden">{poll.question}</h2>
+                  </div>
+                  <div className="flex flex-col items-end flex-shrink-0">
+                      <span className="text-2xl font-bold text-white">{poll.chance}%</span>
+                      <span className="text-sm text-gray-400">chance</span>
+                  </div>
                 </div>
 
                 <Progress 

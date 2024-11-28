@@ -27,7 +27,7 @@ export default function ActivityPage()
     return(
         <>
             <div className="h-screen w-[calc(100vw-40px)] mx-auto overflow-hidden flex flex-col place-items-center">
-                <div className="flex justify-between container mx-auto my-12">
+                <div className="flex justify-between container mx-auto my-12 px-[3%]">
                     <span className="text-4xl font-gilroy font-bold">Activity</span>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -49,7 +49,7 @@ export default function ActivityPage()
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-                <div className="container max-h-max relative overflow-hidden">
+                <div className="container max-h-max relative overflow-hidden p-[3%]">
                     <ActivityFeed/>
                 </div>
             </div>

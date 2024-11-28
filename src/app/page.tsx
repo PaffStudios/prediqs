@@ -10,15 +10,33 @@ import dynamic from "next/dynamic";
 
 export default function Home() {
   // const [firstRender, setFirstRender] = useState(true)
-  const generateRandomData = (id: number) => ({
-    id,
-    title: faker.lorem.sentence(),
-    image: faker.image.avatar(),
-    rewardRate: faker.finance.amount({ min: 5, max: 10 }), // Random between 5 and 25
-    earnings: faker.finance.amount({ min: 5, max: 10 }), // Random between 10 and 60
-    movement: faker.finance.amount({ min: 5, max: 10 }), // Random between 0 and 10
-    isPositive: faker.datatype.boolean(), // Randomly true or false
-  });
+  const generateRandomData = (id: number) => {
+    const titles = ['Will OpenAI release GPT-5 to the public before January 2025?', 
+      'Will Lionel Messi announce his retirement from professional football by the end of 2024??', 
+      'Will the conflict in Gaza see a ceasefire agreement by December 31, 2024?',
+      'Will Novak Djokovic win the Australian Open 2025?',
+      'Will the 2025 World Cup be held in Qatar?',
+      'Will Beyoncé win Album of the Year at the 2025 Grammy Awards?',
+      'Will Apple announce a new AR/VR headset during their 2025 spring event?',
+      'Will the global inflation rate drop below 5% by December 2024?',
+      'Will the Los Angeles Lakers win the NBA Championship in 2025?',
+      'Will Max Verstappen win the 2025 Formula 1 World Championship?',
+      'Will England win the 2025 Ashes series in cricket?',
+      'Will Elon Musk announce a new cryptocurrency by 2025?',
+      'Will an AI-generated song win a major music award by 2025?',
+      'Will a new social media platform surpass TikTok in daily users by 2025?',
+      'Will a major central bank launch its own cryptocurrency by 2025?',
+      'Will Solana become one of the top 3 cryptocurrencies by market cap by 2025?',
+      'Will the total cryptocurrency market cap exceed $5 trillion by 2025?'];
+    return {
+      id,
+      title: titles[Math.floor(Math.random() * titles.length)],
+      image: faker.image.avatar(),
+      rewardRate: faker.finance.amount({ min: 5, max: 10 }),
+      earnings: faker.finance.amount({ min: 5, max: 10 }),
+      movement: faker.finance.amount({ min: 5, max: 10 }), // Random between 0 and 10
+      isPositive: faker.datatype.boolean(), // Randomly true or false
+    }};
 
   const PollCard = dynamic(() => import("@/components/poll-card"), {
     ssr: false,
@@ -108,7 +126,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="w-full max-w-[1400px] mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-2 justify-between">
+        <div className="flex flex-col lg:flex-row justify-between">
           <div className="w-full lg:w-3/4">
             {/* New Section */}
             <section>
@@ -131,8 +149,8 @@ export default function Home() {
           </div>
           <div className="w-full lg:w-1/4 lg:max-w-[300px] hidden lg:block">
             <div ref={activityFeedRef} className="relative overflow-hidden">
-              <span className="text-2xl font-gilroy font-bold block mb-4">Recent Activities</span>
-              <div  className="overflow-y-hidden relative">
+              <span className="text-2xl font-gilroy font-bold block mb-4 p-[3%]">Recent Activities</span>
+              <div  className="overflow-y-hidden relative p-[3%]">
                 <ActivityFeed />
               </div>
               <div className="absolute w-full h-24 left-0 bottom-0 bg-gradient-to-t from-background to-transparent z-10"></div>

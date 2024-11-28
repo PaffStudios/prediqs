@@ -83,7 +83,7 @@ export default function ActivityFeed() {
   };
 
   return (
-    <div className="overflow-hidden max-h-full">
+    <div className="max-h-full">
       <AnimatedList>
         {notifications.map((item, idx) => (
           <Notification {...item} key={idx} />
