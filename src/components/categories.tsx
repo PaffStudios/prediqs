@@ -46,12 +46,12 @@ const Categories = () => {
 
   return (
     <div className="w-full bg-background py-4">
-      <div className="w-[95%] mx-auto px-6 flex items-center justify-between relative">
-        <div className='relative h-full flex flex-row w-[calc(100%-220px)]'>
-          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-background to-transparent z-10"></div>
+      <div className="w-full md:w-[95%] mx-auto px-3 md:px-6 flex items-center justify-between relative overflow-hidden md:overflow-auto">
+        <div className='relative h-full flex flex-row w-screen md:w-[calc(100%-220px)]'>
+          <div className="absolute -inset-x-1 top-0 w-6 md:w-24 h-full bg-gradient-to-r from-background to-transparent z-10"></div>
           <div 
             ref={scrollContainerRef}
-            className="overflow-x-auto lg:w-full no-scrollbar"
+            className="overflow-x-auto w-full lg:w-full no-scrollbar"
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
@@ -86,7 +86,7 @@ const Categories = () => {
           </div>
           <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-background to-transparent"></div>
         </div>
-        <div className="relative ml-4 max-w-72 flex-shrink-0">
+        <div className="relative hidden md:block ml-4 max-w-72 flex-shrink-0">
           <Input
             type="search"
             placeholder="Search"

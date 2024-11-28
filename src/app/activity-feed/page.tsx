@@ -26,7 +26,7 @@ export default function ActivityPage()
       ]
     return(
         <>
-            <div className="h-screen overflow-hidden flex flex-col place-items-center">
+            <div className="h-screen w-[calc(100vw-40px)] mx-auto overflow-hidden flex flex-col place-items-center">
                 <div className="flex justify-between container mx-auto my-12">
                     <span className="text-4xl font-gilroy font-bold">Activity</span>
                     <DropdownMenu>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { motion } from "motion/react"
 import { Area, AreaChart, ResponsiveContainer } from "recharts"
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"s
 import { faker } from '@faker-js/faker';
 // import AvatarCircles from "@/components/ui/avatar-circles";
 
@@ -19,12 +19,8 @@ interface PollCardProps {
   isPositive: boolean
 }
 
-export function PollCard({ id, title, image, rewardRate, movement, isPositive }: PollCardProps) {
-  const [firstRender, setFirstRender] = useState(true)
-
-  useEffect(() => {
-    if(firstRender) setFirstRender(false)
-  }, [firstRender])
+export default function PollCard({ id, title, image, rewardRate, movement, isPositive }: PollCardProps) {
+ 
 
 const data = Array.from({ length: 15 }, () => ({
   uv: faker.finance.amount({ min: 4000, max: 9000 }),
@@ -35,7 +31,7 @@ const data = Array.from({ length: 15 }, () => ({
       initial={{ opacity: 0, scale: 0.8, x:-150 }}
       animate={{ opacity: 1, scale: 1, x:0 }}
       transition={{ duration: 0.3, delay: id * 0.05 }}
-      className="w-screen mx-auto sm:w-full"
+      className="w-[90vw] mx-auto sm:w-full"
     >
       <Card className="overflow-hidden w-full rounded-2xl bg-transparent backdrop-blur-md [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] hover:[box-shadow:0_-20px_80px_-20px_#ffffff3f_inset] transition-colors p-4 relative">
         <div className="w-full h-[80%] absolute left-0 bottom-0 -z-10">
@@ -69,7 +65,7 @@ const data = Array.from({ length: 15 }, () => ({
             <div className="relative h-12 w-12 flex-shrink-0 rounded-xl z-20 overflow-hidden">
               <Image
                 src={image}
-                alt={title}
+                alt={"title"}
                 fill
                 className="object-cover select-none"
               />

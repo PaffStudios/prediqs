@@ -38,8 +38,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          value={{ light: "light", dark: "dark" }}
+          defaultTheme="dark"
         >
         <Navigation />
         {children}

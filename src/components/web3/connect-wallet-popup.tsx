@@ -63,11 +63,11 @@ export function ConnectWalletPopup({ isOpen, onClose, onConnect }: ConnectWallet
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Connect Your Wallet</DialogTitle>
           <DialogClose />
         </DialogHeader>
+      <DialogContent className="sm:max-w-[425px]">
         <div className="grid gap-4 py-4">
           <Button onClick={connectWallet} disabled={isConnecting}>
             {isConnecting ? 'Connecting...' : 'Connect MetaMask'}

@@ -64,10 +64,16 @@ const Navigation: React.FC = () => {
                 <SheetHeader>
                   <SheetTitle className="font-gilroy">Navigation</SheetTitle>
                 </SheetHeader>
+                <div className="h-[95%] my-auto flex justify-between flex-col">
                 <div className="mt-4 flex flex-col space-y-3">
                   {navItems.map((item) => (
                     <NavLink key={item.href} {...item} />
                   ))}
+                </div>
+                <div>
+
+                  <WalletComponent />
+                </div>
                 </div>
               </SheetContent>
             </Sheet>
@@ -84,9 +90,10 @@ const Navigation: React.FC = () => {
                   <p className='text-md pt-0.5 font-gilroy font-bold'>Discover</p> 
                 </Link>
             </div>
+            
           )}
         </div>
-        <div className="">
+        <div className="hidden md:block">
           <WalletComponent />
         </div>
       </div>

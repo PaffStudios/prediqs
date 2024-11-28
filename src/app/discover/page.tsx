@@ -1,6 +1,7 @@
 "use client"
-import CardWallet from "@/components/card-slider"
+// import CardWallet from "@/components/card-slider"
 import Ripple from "@/components/ui/ripple"
+import dynamic from "next/dynamic"
 
 export default function DiscoverPage()
 {
@@ -9,12 +10,14 @@ export default function DiscoverPage()
         // setIsExpanded(!isExpanded)
     }
 
+    const noSsrCardWallet = dynamic(() => import("@/components/card-slider"), { ssr: false })
+    const NoSsrCardWallet = noSsrCardWallet as React.ComponentType<{ handleWalletDetails: () => void }>;
     return(
         <div className="flex flex-row">
             <div className={`h-screen "w-full" transition-all duration-300 overflow-hidden grid place-items-center`}>
                 <Ripple/>
-                <div className="w-full overflow-hidden">
-                    <CardWallet handleWalletDetails={handleWalletDetails}/>
+                <div className="w-screen overflow-hidden">
+                    <NoSsrCardWallet handleWalletDetails={handleWalletDetails}/>
                 </div>
             </div>
             {/* <div className={`h-screen ${isExpanded ? "w-1/2" : "w-0"} bg-background transition-all duration-300 grid place-items-center`}>

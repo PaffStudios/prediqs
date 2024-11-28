@@ -24,7 +24,7 @@ interface PollCard {
 
   const polls: PollCard[] = Array.from({ length: 4 }).map((_, i) => ({
     id: String(i + 1),
-    question: faker.lorem.sentence(),
+    question: faker.lorem.sentence({min:3, max: 6}),
     image: faker.image.avatar(),
     chance: faker.number.int({max:100}),
     volume: Number(faker.finance.amount({min:0, max:99})),
@@ -37,7 +37,7 @@ interface PollCard {
   }
   
 
-const TWEEN_FACTOR = 0.5
+const TWEEN_FACTOR = 1
 
 const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -56,7 +56,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     setAnimation(vote)
     
     // Reset animation after 1 second
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 500))
     setAnimation(null)
     setSelectedPoll(null)
   }
@@ -98,7 +98,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
           const tweenNode = tweenNodes.current[slideIndex]
           
           // Calculate rotation based on distance from center
-          const rotate = Math.max(-5, Math.min((1 - tweenValue) * 10, 5))
+          const rotate = Math.max(-5, Math.min((1 - tweenValue) * 12, 5))
 
           // Apply rotation only if not the center element
           if (Math.abs(diffToTarget) > 0.01) {
@@ -158,7 +158,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
               className="relative h-64 w-full shrink-0"
               onClick={props.handleWalletDetails}
             >
-              <div className={`card absolute inset-x-0 mx-auto w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
+              <div className={`card absolute inset-x-0 mx-auto max-w-screen w-[90%] md:w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
                 <AnimatePresence>
                     {selectedPoll === poll.id && animation && (
                         <motion.div
@@ -190,7 +190,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                     height={48}
                     className="rounded-full bg-gray-700 p-2"
                     />
-                    <h2 className="text-lg font-semibold text-white">{poll.question}</h2>
+                    <h2 className="text-sm md:text-lg font-semibold text-white text-nowrap text-ellipsis w-full overflow-hidden">{poll.question.substring(0, 20) + "..."}</h2>
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-2xl font-bold text-white">{poll.chance}%</span>

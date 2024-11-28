@@ -1,13 +1,15 @@
 "use client"
 import Categories from "@/components/categories"
-import { PollCard } from "@/components/poll-card"
+// import PollCard  from "@/components/poll-card"
 import ActivityFeed from "@/components/activity-feed"
 import Marquee from "@/components/ui/marquee";
 import ReviewCard from "@/components/review-card";
 import { useEffect, useRef } from "react";
 import { faker } from '@faker-js/faker';
+import dynamic from "next/dynamic";
 
 export default function Home() {
+  // const [firstRender, setFirstRender] = useState(true)
   const generateRandomData = (id: number) => ({
     id,
     title: faker.lorem.sentence(),
@@ -18,36 +20,41 @@ export default function Home() {
     isPositive: faker.datatype.boolean(), // Randomly true or false
   });
 
-
-
+  const PollCard = dynamic(() => import("@/components/poll-card"), {
+    ssr: false,
+  });
+  
+  
   const mainRef = useRef<HTMLDivElement>(null)
   const activityFeedRef = useRef<HTMLDivElement>(null)
-
+  
   useEffect(() => {
     if (!activityFeedRef || !mainRef) return;
-  
+    
     const mainHeight = mainRef.current?.offsetHeight || 0; // Ensure fallback to 0
     activityFeedRef.current!.style.maxHeight = `${mainHeight}px`;
     activityFeedRef.current!.style.height = `${mainHeight}px`;
   }, [mainRef, activityFeedRef]); // Add dependencies if needed
-
+  
   useEffect(() => {
     const handleResize = () => {
       if (!activityFeedRef || !mainRef) return;
-  
+      
       const mainHeight = mainRef.current?.offsetHeight || 0; // Ensure fallback to 0
       activityFeedRef.current!.style.maxHeight = `${mainHeight}px`;
       activityFeedRef.current!.style.height = `${mainHeight}px`;
     };
-
+    
     window.addEventListener("resize", handleResize);
-
+    
     // Cleanup on unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
+  
+  
+  
   const reviews = [
     {
       name: "Jack",
@@ -91,6 +98,9 @@ export default function Home() {
   
   const pollData = Array.from({ length: 6 }, (_, i) => generateRandomData(i));
   const pollData2 = Array.from({ length: 8 }, (_, i) => generateRandomData(i));
+  if(!generateRandomData){
+    return null
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Categories Bar */}
@@ -103,7 +113,7 @@ export default function Home() {
             {/* New Section */}
             <section>
               <h2 className="mb-4 text-2xl font-gilroy font-bold">New</h2>
-              <div ref={mainRef} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <div ref={mainRef} className="lg:min-h-[600px] grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {pollData.map((poll) => (
                   <PollCard
                     key={poll.id}
