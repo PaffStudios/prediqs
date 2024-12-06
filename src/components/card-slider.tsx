@@ -212,6 +212,8 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     })))
   }, [])
 
+
+
   return (
     <div className="h-screen w-full px-4 grid place-items-center select-none">
       <div className="relative h-[500px] w-full" ref={emblaRef}>
@@ -220,7 +222,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
             <div
               key={index}
               className="relative h-64 w-full shrink-0"
-              onClick={props.onClick}
+              onClick={!props.isMobile ? props.onClick : undefined}
             >
               <div className={`${props.isExpanded ? "top-[80%]" : "top-0"} card absolute inset-x-0 mx-auto max-w-screen w-[90%] md:w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
                 <div className={`absolute ${props.isExpanded ? "pointer-events-auto" : "pointer-events-none"} chart p-4 bg-black left-0 bottom-[110%] w-full h-96 rounded-xl transition-all duration-200 ${props.isExpanded ? "opacity-100" : "opacity-0"}`}>
@@ -230,11 +232,11 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                       <Bar hide={!props.barsHidden} dataKey="mobile" fill="var(--color-mobile)" radius={4} />
                     </BarChart>
                   </ChartContainer> */}
-                  <TradingView />
+                  {!props.isMobile && <TradingView/>}
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <div className="w-full h-full absolute left-0 bottom-0 overflow-hidden rounded-3xl -z-10">
-                    {props.isMobile ? <></> : <ResponsiveContainer width="120%">
+                    <ResponsiveContainer width="120%">
                       <AreaChart data={poll.uv}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                         <defs>
@@ -258,7 +260,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                             <Area type="monotone" dataKey="uv" stroke="#e53e3e" fillOpacity={1} strokeWidth={3} className="blur-2xl" fill="url(#colorUvRed)" />
                           </>}
                       </AreaChart>
-                    </ResponsiveContainer>}
+                    </ResponsiveContainer>
                   </div>
                   <div className="flex items-center gap-3 flex-grow w-[60%]">
                       <Image
