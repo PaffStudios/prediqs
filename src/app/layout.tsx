@@ -4,6 +4,7 @@ import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import { ThemeProvider } from "@/utils/providers/theme-provider";
 import localFont from 'next/font/local'
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Prediqs",
@@ -43,6 +44,7 @@ export default function RootLayout({
         <Navigation />
         {children}
         <Footer />
+        <Toaster />
         </ThemeProvider>
       </body>
     </html>

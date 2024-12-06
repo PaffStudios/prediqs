@@ -1,15 +1,16 @@
 "use client"
-
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   EmblaCarouselType,
 } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
-import { ArrowDownCircle, ArrowUpCircle, BarChart3, CircleArrowLeft, Star, Users } from 'lucide-react'
-import { AnimatePresence, motion } from "framer-motion"
+import { BarChart3, CircleArrowLeft, Star, Users } from 'lucide-react'
+import Autoplay from "embla-carousel-autoplay"
+import { useAutoplay } from "./ui/embla-carousel-autoplay"
 import { Progress } from "./ui/progress"
 import Image from "next/image"
-import Link from "next/link"
+import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
+import { Bar, BarChart } from "recharts"
 import { faker } from "@faker-js/faker"
 
 interface PollCard {
@@ -47,10 +48,15 @@ interface PollCard {
     volume: Number(faker.finance.amount({min:0, max:99})),
     participants: faker.number.int({max:1000}),
     starred: faker.datatype.boolean(),
+
   }))
   
   interface CardSliderProps {
-    handleWalletDetails: () => void
+    onClick: () => void
+    skipToNext: boolean
+    onPollSelected: (element:EmblaCarouselType) => void
+    autoplayIsPlaying: boolean
+    isExpanded: boolean
   }
   
 
@@ -62,21 +68,54 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     loop: true,
     skipSnaps: true,
     align: 'center',
-  })
+  }, [Autoplay({playOnInit:false, delay: 3000})])
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
-  const [selectedPoll, setSelectedPoll] = useState<string | null>(null)
-  const [animation, setAnimation] = useState<"yes" | "no" | null>(null)
 
-  const handleVote = async (pollId: string, vote: "yes" | "no") => {
-    setSelectedPoll(pollId)
-    setAnimation(vote)
-    
-    // Reset animation after 1 second
-    await new Promise(resolve => setTimeout(resolve, 500))
-    setAnimation(null)
-    setSelectedPoll(null)
-  }
+  const { autoplayIsPlaying, toggleAutoplay, onAutoplayButtonClick } =
+    useAutoplay(emblaApi)
+
+  useEffect(() => {
+    toggleAutoplay(props.autoplayIsPlaying)
+  }, [props.autoplayIsPlaying])
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.scrollNext()
+    }
+  }, [props.skipToNext])
+
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const updateSlideVisibility = () => {
+      const selectedIndex = emblaApi.selectedScrollSnap();
+      emblaApi.slideNodes().forEach((node, index) => {
+        const card = node.querySelector('.card') as HTMLElement;
+        if (card) {
+          if (props.isExpanded) {
+            card.style.opacity = index === selectedIndex ? '1' : '0';
+          } else {
+            card.style.opacity = '1';
+          }
+        }
+      });
+    };
+
+    // Initial update
+    updateSlideVisibility();
+
+    // Update on scroll
+    emblaApi.on('scroll', updateSlideVisibility);
+
+    // Update when expansion state changes
+    updateSlideVisibility();
+
+    return () => {
+      emblaApi.off('scroll', updateSlideVisibility);
+    };
+  }, [emblaApi, props.isExpanded]);
 
   const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
     tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
@@ -143,6 +182,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
       .on("reInit", setTweenFactor)
       .on("reInit", tweenScale)
       .on("scroll", tweenScale)
+      .on("settle", props.onPollSelected)
 
     return () => {
       emblaApi
@@ -153,51 +193,45 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     }
   }, [emblaApi, setTweenNodes, setTweenFactor, tweenScale])
 
+  const chartData = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+  ]
+
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "#48bb78",
+    },
+    mobile: {
+      label: "Mobile",
+      color: "#f56565",
+    },
+  } satisfies ChartConfig
+
   return (
     <div className="h-screen w-full px-4 grid place-items-center select-none">
-      <div className="pb-4 absolute top-8 left-8 w-full">
-        <div className="flex items-center gap-4">
-            <Link href="/" className="z-10">
-                <CircleArrowLeft className="w-12 h-12"/>
-            </Link>
-            <div>
-                <h1 className="text-3xl font-bold">Dicover</h1>
-                <h2 className="text-3xl text-gray-400">New Polls</h2>
-            </div>
-        </div>
-      </div>
-
       <div className="relative h-[500px] w-full" ref={emblaRef}>
         <div className="h-full">
           {polls.map((poll, index) => (
             <div
               key={index}
               className="relative h-64 w-full shrink-0"
-              onClick={props.handleWalletDetails}
+              onClick={props.onClick}
             >
-              <div className={`card absolute inset-x-0 mx-auto max-w-screen w-[90%] md:w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
-                <AnimatePresence>
-                    {selectedPoll === poll.id && animation && (
-                        <motion.div
-                        className={`absolute inset-0 z-10 flex items-center justify-center rounded-3xl ${
-                            animation === "yes" ? "bg-green-500/20" : "bg-red-500/20"
-                        }`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        >
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1.5 }}
-                            exit={{ scale: 0 }}
-                            className={animation === "yes" ? "text-green-500" : "text-red-500"}
-                        >
-                            {animation === "yes" ? <ArrowUpCircle size={48} /> : <ArrowDownCircle size={48} />}
-                        </motion.div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
+              <div className={`${props.isExpanded ? "top-[80%]" : "top-0"} card absolute inset-x-0 mx-auto max-w-screen w-[90%] md:w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
+                <div className={`absolute left-0 bottom-full w-full h-96 rounded-xl transition-all duration-200 ${props.isExpanded ? "opacity-100" : "opacity-0"}`}>
+                  <ChartContainer config={chartConfig} className="h-full w-full">
+                    <BarChart accessibilityLayer data={chartData}>
+                      <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+                      <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3 flex-grow w-[60%]">
                       <Image
@@ -207,7 +241,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                       height={48}
                       className="rounded-xl bg-gray-700 p-2"
                       />
-                      <h2 className="text-sm md:text-lg font-semibold text-white text-nowrap text-ellipsis w-full overflow-hidden">{poll.question}</h2>
+                      <h2 className="text-sm md:text-lg font-semibold text-white md:text-nowrap text-ellipsis w-full overflow-hidden">{poll.question}</h2>
                   </div>
                   <div className="flex flex-col items-end flex-shrink-0">
                       <span className="text-2xl font-bold text-white">{poll.chance}%</span>
@@ -219,25 +253,6 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                 value={poll.chance} 
                 className="my-4 bg-gray-700" 
                 />
-
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                <motion.button
-                    className="flex items-center justify-center gap-2 rounded-lg bg-green-500/10 py-2 text-green-500 transition-colors hover:bg-green-500/20"
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleVote(poll.id, "yes")}
-                >
-                    <ArrowUpCircle className="h-4 w-4" />
-                    Buy Yes
-                </motion.button>
-                <motion.button
-                    className="flex items-center justify-center gap-2 rounded-lg bg-red-500/10 py-2 text-red-500 transition-colors hover:bg-red-500/20"
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleVote(poll.id, "no")}
-                >
-                    <ArrowDownCircle className="h-4 w-4" />
-                    Buy No
-                </motion.button>
-                </div>
 
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
                     <div className="flex items-center gap-4">

@@ -64,7 +64,7 @@ export function ConnectWalletPopup({ isOpen, onClose, onConnect }: ConnectWallet
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogHeader>
-          <DialogTitle>Connect Your Wallet</DialogTitle>
+          <DialogTitle></DialogTitle>
           <DialogClose />
         </DialogHeader>
       <DialogContent className="sm:max-w-[425px]">
