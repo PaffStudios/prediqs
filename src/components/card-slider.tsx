@@ -236,7 +236,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                 </div>
                 <div className="flex items-start justify-between gap-4">
                   <div className="w-full h-full absolute left-0 bottom-0 overflow-hidden rounded-3xl -z-10">
-                    <ResponsiveContainer width="120%">
+                    {props.isMobile ? <></> : <ResponsiveContainer width="120%">
                       <AreaChart data={poll.uv}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                         <defs>
@@ -260,7 +260,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                             <Area type="monotone" dataKey="uv" stroke="#e53e3e" fillOpacity={1} strokeWidth={3} className="blur-2xl" fill="url(#colorUvRed)" />
                           </>}
                       </AreaChart>
-                    </ResponsiveContainer>
+                    </ResponsiveContainer>}
                   </div>
                   <div className="flex items-center gap-3 flex-grow w-[60%]">
                       <Image
