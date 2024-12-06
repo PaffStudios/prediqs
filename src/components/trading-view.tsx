@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useCallback } from 'react';
 
 function TradingViewWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [_initialized, setInitialized] = React.useState(false);
 
   const initWidget = useCallback(() => {
     if (containerRef.current) {
@@ -26,13 +27,12 @@ function TradingViewWidget() {
     }
   }, []);
 
-  let _initialized = false;
   useEffect(() => {
     if(_initialized)
         return;
     initWidget();
-    _initialized = true;
-  }, [initWidget]);
+    setInitialized(true);
+  }, [initWidget, setInitialized, _initialized]);
 
   return (
     <div className="tradingview-widget-container rounded-sm border-black border-2 overflow-hidden" ref={containerRef} style={{ height: "100%", width: "100%" }}>

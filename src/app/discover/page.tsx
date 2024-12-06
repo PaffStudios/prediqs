@@ -15,9 +15,9 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowDownCircle, ArrowUpCircle, Settings } from "lucide-react"
-import { EmblaCarouselType } from "embla-carousel"
 import WalletComponent from "@/components/web3/wallet-component"
 import { Logo } from "@/components/ui/logo"
+import Timeout = NodeJS.Timeout
 
 export default function DiscoverPage()
 {
@@ -31,9 +31,10 @@ export default function DiscoverPage()
     const [minTradePrice, setMinTradePrice] = useState(0)
     const arrowEffectParent = useRef<HTMLDivElement>(null)
     const [animation, setAnimation] = useState<"yes" | "no" | null>(null)
+    const voteLoop = useRef<Timeout>()
 
     const onPollSelected = useCallback(
-        (emblaApi: EmblaCarouselType) => {
+        () => {
             setBarsHidden(true)
         },
         []
@@ -49,8 +50,6 @@ export default function DiscoverPage()
         setBarsHidden(false)
     }
 
-    let voteLoop:NodeJS.Timeout
-
     const handleTrade = () => {
         if(minTradePrice > maxTradePrice){
             toast({
@@ -60,34 +59,6 @@ export default function DiscoverPage()
             return
         }
         setIsTrading(!isTrading)
-    }
-
-    useEffect(() => {
-        if (isTrading) {
-            voteLoop = setInterval(() => {
-                const randomBoolean = Math.random() >= 0.5;
-                handleVote(randomBoolean ? "yes" : "no")
-            }, 3000);
-        } else {
-            setAnimation(null);
-            if (voteLoop) {
-                clearInterval(voteLoop);
-            }
-        }
-
-        return () => {
-            if (voteLoop) {
-                clearInterval(voteLoop);
-            }
-        };
-    }, [isTrading]);
-
-    const handleMaxTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMaxTradePrice(parseInt(e.currentTarget.value, 10))
-    }
-
-    const handleMinTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMinTradePrice(parseInt(e.currentTarget.value, 10))
     }
 
     const handleVote = async (vote: "yes" | "no") => {
@@ -101,6 +72,34 @@ export default function DiscoverPage()
         setAnimation(null)
         await new Promise(resolve => setTimeout(resolve, 1500))
         setDisableInput(false)
+    }
+
+    useEffect(() => {
+        if (isTrading) {
+            voteLoop.current = setInterval(() => {
+                const randomBoolean = Math.random() >= 0.5;
+                handleVote(randomBoolean ? "yes" : "no")
+            }, 3000);
+        } else {
+            setAnimation(null);
+            if (voteLoop) {
+                clearInterval(voteLoop.current);
+            }
+        }
+
+        return () => {
+            if (voteLoop) {
+                clearInterval(voteLoop.current);
+            }
+        };
+    }, [isTrading]);
+
+    const handleMaxTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMaxTradePrice(parseInt(e.currentTarget.value, 10))
+    }
+
+    const handleMinTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMinTradePrice(parseInt(e.currentTarget.value, 10))
     }
 
     const tradeAmountInput = useRef<HTMLInputElement>(null)
@@ -131,7 +130,7 @@ export default function DiscoverPage()
                             transition={{ duration: 1}}
                             className={`absolute top-0 left-0 w-screen h-screen z-0}`}>
                             {Array.from({ length: 50 }, (_, i) => (
-                               <motion.div >
+                               <motion.div key={i}>
                                     {animation === "yes" ? (
                                         <motion.div
                                             initial={{ opacity: 0, translateY: 0, top: Math.random() * 100+"%", left: Math.random() * 100+"%", position: "absolute" }}

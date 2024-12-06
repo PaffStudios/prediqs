@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import {
   EmblaCarouselType,
 } from "embla-carousel"
@@ -8,7 +8,6 @@ import { BarChart3, Star, Users } from 'lucide-react'
 import Autoplay from "embla-carousel-autoplay"
 import { useAutoplay } from "./ui/embla-carousel-autoplay"
 import Image from "next/image"
-import { type ChartConfig } from "@/components/ui/chart"
 import TradingView from "@/components/trading-view";
 import { faker } from "@faker-js/faker"
 import { AreaChart,Area, ResponsiveContainer } from "recharts"
@@ -52,19 +51,6 @@ interface PollCard {
     positive: faker.datatype.boolean()
   }))
 
-  const pollList = [
-    {
-      id: '1',
-      question: 'Will OpenAI release GPT-5 to the public before January 2025?',
-      image: faker.image.avatar(),
-      chance: 100,
-      volume: 65,
-      participants: 623,
-      starred: true,
-      positive: faker.datatype.boolean()
-    }
-  ]
-  
   interface CardSliderProps {
     onClick: () => void
     skipToNext: boolean
@@ -88,18 +74,18 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
 
-  const { autoplayIsPlaying, toggleAutoplay, onAutoplayButtonClick } =
+  const { toggleAutoplay } =
     useAutoplay(emblaApi)
 
   useEffect(() => {
     toggleAutoplay(props.autoplayIsPlaying)
-  }, [props.autoplayIsPlaying])
+  }, [props.autoplayIsPlaying, toggleAutoplay])
 
   useEffect(() => {
     if (emblaApi) {
       emblaApi.scrollNext()
     }
-  }, [props.skipToNext])
+  }, [props.skipToNext, emblaApi])
 
 
   useEffect(() => {
@@ -213,27 +199,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
         .off("scroll", props.onScroll)
         .off("settle", props.onPollSelected)
     }
-  }, [emblaApi, setTweenNodes, setTweenFactor, tweenScale])
-
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ]
-
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "#48bb78",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "#f56565",
-    },
-  } satisfies ChartConfig
+  }, [emblaApi, setTweenNodes, setTweenFactor, tweenScale, props.onScroll, props.onPollSelected])
 
   const areaChartData = Array.from({ length: 15 }, () => ({
     uv: faker.finance.amount({ min: 4000, max: 9000 }),
