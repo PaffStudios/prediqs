@@ -65,7 +65,7 @@ export default function DiscoverPage()
         setIsTrading(!isTrading)
     }
 
-    const handleVote = useCallback(async (vote: "yes" | "no") => {
+    const handleVote = (async (vote: "yes" | "no") => {
         // setSelectedPoll(pollId)
         setDisableInput(true)
         setAnimation(vote)
@@ -77,7 +77,7 @@ export default function DiscoverPage()
         await new Promise(resolve => setTimeout(resolve, 1500))
         setDisableInput(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    })
 
     useEffect(() => {
         if (isTrading) {
@@ -97,7 +97,8 @@ export default function DiscoverPage()
                 clearInterval(voteLoop.current);
             }
         };
-    }, [isTrading, handleVote]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isTrading]);
 
     const handleMaxTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMaxTradePrice(parseInt(e.currentTarget.value, 10))
@@ -156,7 +157,7 @@ export default function DiscoverPage()
                             exit={{ opacity: 0}} 
                             transition={{ duration: 1}}
                             className={`absolute top-0 left-0 w-screen h-screen z-0}`}>
-                            {Array.from({ length: 25 }, (_, i) => (
+                            {Array.from({ length: isMobile ? 5 : 12 }, (_, i) => (
                                <motion.div key={i}>
                                     {animation === "yes" ? (
                                         <motion.div
@@ -164,7 +165,7 @@ export default function DiscoverPage()
                                             animate={{ opacity: 1, translateY: -300 }}
                                             transition={{ duration: 2, delay: Math.min(0.9, Math.random())}}
                                         >
-                                            <ArrowUpCircle className="text-green-500" size={Math.max(48, Math.random() * 72)} />
+                                            <ArrowUpCircle className="text-green-500" size={Math.max(120, Math.random() * 200)} />
                                         </motion.div>
                                     ) : (
                                         <motion.div
@@ -172,7 +173,7 @@ export default function DiscoverPage()
                                             animate={{ opacity: 1, translateY: 300 }}
                                             transition={{ duration: 2, delay: Math.min(0.9, Math.random())}}
                                         >
-                                            <ArrowDownCircle className="text-red-500"  size={Math.max(48, Math.random() * 72)} />
+                                            <ArrowDownCircle className="text-red-500"  size={Math.max(120, Math.random() * 200)} />
                                         </motion.div>
                                     )}
                                </motion.div> 
