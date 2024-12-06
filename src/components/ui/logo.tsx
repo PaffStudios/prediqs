@@ -1,5 +1,5 @@
-import lightmodelogo from '@/../public/logo/light.png'
-import darkmodelogo from '@/../public/logo/dark.png'
+import lightmodelogo from '@/../public/logo/logo.png'
+import darkmodelogo from '@/../public/logo/logo.png'
 import Image from 'next/image'
 import { useTheme } from "next-themes"
 

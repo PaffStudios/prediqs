@@ -4,14 +4,14 @@ import {
   EmblaCarouselType,
 } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
-import { BarChart3, CircleArrowLeft, Star, Users } from 'lucide-react'
+import { BarChart3, Star, Users } from 'lucide-react'
 import Autoplay from "embla-carousel-autoplay"
 import { useAutoplay } from "./ui/embla-carousel-autoplay"
-import { Progress } from "./ui/progress"
 import Image from "next/image"
-import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
-import { Bar, BarChart } from "recharts"
+import { type ChartConfig } from "@/components/ui/chart"
+import TradingView from "@/components/trading-view";
 import { faker } from "@faker-js/faker"
+import { AreaChart,Area, ResponsiveContainer } from "recharts"
 
 interface PollCard {
     id: string
@@ -21,6 +21,7 @@ interface PollCard {
     volume: number
     participants: number
     starred?: boolean
+    positive: boolean
   }
 
   const titles = ['Will OpenAI release GPT-5 to the public before January 2025?', 
@@ -48,13 +49,28 @@ interface PollCard {
     volume: Number(faker.finance.amount({min:0, max:99})),
     participants: faker.number.int({max:1000}),
     starred: faker.datatype.boolean(),
-
+    positive: faker.datatype.boolean()
   }))
+
+  const pollList = [
+    {
+      id: '1',
+      question: 'Will OpenAI release GPT-5 to the public before January 2025?',
+      image: faker.image.avatar(),
+      chance: 100,
+      volume: 65,
+      participants: 623,
+      starred: true,
+      positive: faker.datatype.boolean()
+    }
+  ]
   
   interface CardSliderProps {
     onClick: () => void
     skipToNext: boolean
     onPollSelected: (element:EmblaCarouselType) => void
+    onScroll: () => void
+    barsHidden: boolean
     autoplayIsPlaying: boolean
     isExpanded: boolean
   }
@@ -93,11 +109,14 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
       const selectedIndex = emblaApi.selectedScrollSnap();
       emblaApi.slideNodes().forEach((node, index) => {
         const card = node.querySelector('.card') as HTMLElement;
+        const chart = node.querySelector('.chart') as HTMLElement;
         if (card) {
           if (props.isExpanded) {
             card.style.opacity = index === selectedIndex ? '1' : '0';
+            chart.style.pointerEvents = index === selectedIndex ? 'auto' : 'none';
           } else {
             card.style.opacity = '1';
+            chart.style.pointerEvents = 'none';
           }
         }
       });
@@ -182,6 +201,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
       .on("reInit", setTweenFactor)
       .on("reInit", tweenScale)
       .on("scroll", tweenScale)
+      .on("scroll", props.onScroll)
       .on("settle", props.onPollSelected)
 
     return () => {
@@ -190,6 +210,8 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
         .off("reInit", setTweenFactor)
         .off("reInit", tweenScale)
         .off("scroll", tweenScale)
+        .off("scroll", props.onScroll)
+        .off("settle", props.onPollSelected)
     }
   }, [emblaApi, setTweenNodes, setTweenFactor, tweenScale])
 
@@ -213,6 +235,10 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     },
   } satisfies ChartConfig
 
+  const areaChartData = Array.from({ length: 15 }, () => ({
+    uv: faker.finance.amount({ min: 4000, max: 9000 }),
+  }));
+
   return (
     <div className="h-screen w-full px-4 grid place-items-center select-none">
       <div className="relative h-[500px] w-full" ref={emblaRef}>
@@ -224,15 +250,43 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
               onClick={props.onClick}
             >
               <div className={`${props.isExpanded ? "top-[80%]" : "top-0"} card absolute inset-x-0 mx-auto max-w-screen w-[90%] md:w-[65%] rounded-3xl p-6 bg-card shadow-lg backdrop-blur-sm transition-all duration-200`}>
-                <div className={`absolute left-0 bottom-full w-full h-96 rounded-xl transition-all duration-200 ${props.isExpanded ? "opacity-100" : "opacity-0"}`}>
-                  <ChartContainer config={chartConfig} className="h-full w-full">
+                <div className={`absolute ${props.isExpanded ? "pointer-events-auto" : "pointer-events-none"} chart p-4 bg-black left-0 bottom-[110%] w-full h-96 rounded-xl transition-all duration-200 ${props.isExpanded ? "opacity-100" : "opacity-0"}`}>
+                  {/* <ChartContainer config={chartConfig} className="h-full w-full bar-chart">
                     <BarChart accessibilityLayer data={chartData}>
-                      <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                      <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                      <Bar hide={!props.barsHidden} dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+                      <Bar hide={!props.barsHidden} dataKey="mobile" fill="var(--color-mobile)" radius={4} />
                     </BarChart>
-                  </ChartContainer>
+                  </ChartContainer> */}
+                  <TradingView />
                 </div>
                 <div className="flex items-start justify-between gap-4">
+                  <div className="w-full h-full absolute left-0 bottom-0 overflow-hidden rounded-3xl -z-10">
+                    <ResponsiveContainer width="120%">
+                      <AreaChart data={areaChartData}
+                        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                        <defs>
+                          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#43A047" stopOpacity={0.5} />
+                            <stop offset="95%" stopColor="#43A047" stopOpacity={0} />
+                          </linearGradient>
+                          <linearGradient id="colorUvRed" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#e53e3e" stopOpacity={0.5} />
+                            <stop offset="95%" stopColor="#e53e3e" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        {poll.positive ?
+                          <>
+                            <Area type="monotone" dataKey="uv" stroke="#43A047" strokeWidth={3} fillOpacity={1} fill="url(#colorUv)" />
+                            <Area type="monotone" dataKey="uv" stroke="#43A047" strokeWidth={3} className="blur-2xl" fillOpacity={1} fill="url(#colorUv)" />
+                          </>
+                          :
+                          <>
+                            <Area type="monotone" dataKey="uv" stroke="#e53e3e" fillOpacity={1} strokeWidth={3} fill="url(#colorUvRed)" />
+                            <Area type="monotone" dataKey="uv" stroke="#e53e3e" fillOpacity={1} strokeWidth={3} className="blur-2xl" fill="url(#colorUvRed)" />
+                          </>}
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
                   <div className="flex items-center gap-3 flex-grow w-[60%]">
                       <Image
                       src={poll.image}
@@ -241,18 +295,13 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                       height={48}
                       className="rounded-xl bg-gray-700 p-2"
                       />
-                      <h2 className="text-sm md:text-lg font-semibold text-white md:text-nowrap text-ellipsis w-full overflow-hidden">{poll.question}</h2>
+                      <h2 className="text-sm md:text-lg font-semibold text-white  text-ellipsis w-full overflow-hidden">{poll.question}</h2>
                   </div>
                   <div className="flex flex-col items-end flex-shrink-0">
                       <span className="text-2xl font-bold text-white">{poll.chance}%</span>
                       <span className="text-sm text-gray-400">chance</span>
                   </div>
                 </div>
-
-                <Progress 
-                value={poll.chance} 
-                className="my-4 bg-gray-700" 
-                />
 
                 <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
                     <div className="flex items-center gap-4">

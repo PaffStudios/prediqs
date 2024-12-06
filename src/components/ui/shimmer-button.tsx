@@ -33,15 +33,14 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
           {
             "--spread": "90deg",
             "--shimmer-color": shimmerColor,
-            "--radius": borderRadius,
             "--speed": shimmerDuration,
             "--cut": shimmerSize,
             "--bg": background,
           } as CSSProperties
         }
         className={cn(
-          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap border border-white/10 px-6 py-3 text-white [background:var(--bg)] [border-radius:var(--radius)] dark:text-black",
-          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px",
+          "group relative z-0 flex cursor-pointer items-center justify-center overflow-hidden whitespace-nowrap px-4 py-2 text-white dark:text-black border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "transform-gpu transition-transform duration-300 ease-in-out active:translate-y-px ",
           className,
         )}
         ref={ref}
@@ -63,7 +62,7 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
         {children}
 
         {/* Highlight */}
-        <div
+        {/* <div
           className={cn(
             "insert-0 absolute size-full",
 
@@ -78,7 +77,7 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
             // on click
             "group-active:shadow-[inset_0_-10px_10px_#ffffff3f]",
           )}
-        />
+        /> */}
 
         {/* backdrop */}
         <div

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { AnimatePresence, motion } from "framer-motion"
-import { ArrowDownCircle, ArrowUpCircle } from "lucide-react"
+import { ArrowDownCircle, ArrowUpCircle, Settings } from "lucide-react"
 import { EmblaCarouselType } from "embla-carousel"
 import WalletComponent from "@/components/web3/wallet-component"
 import { Logo } from "@/components/ui/logo"
@@ -24,6 +24,7 @@ export default function DiscoverPage()
     const { toast } = useToast()
     const [skipToNext, setSkipToNext] = useState(false)
     const [isExpanded, setIsExpanded] = useState(false)
+    const [barsHidden, setBarsHidden] = useState(false)
     const [isTrading, setIsTrading] = useState(false)
     const [disableInput, setDisableInput] = useState(false)
     const [maxTradePrice, setMaxTradePrice] = useState(0)
@@ -33,13 +34,19 @@ export default function DiscoverPage()
 
     const onPollSelected = useCallback(
         (emblaApi: EmblaCarouselType) => {
-            console.log(emblaApi)
+            setBarsHidden(true)
         },
         []
     )
 
+    const onScroll = useCallback(() => {
+        setBarsHidden(false)
+    }, [])
+
     const onPollClick = () => {
         setIsExpanded(!isExpanded)
+        setBarsHidden(true)
+        setBarsHidden(false)
     }
 
     let voteLoop:NodeJS.Timeout
@@ -58,7 +65,6 @@ export default function DiscoverPage()
     useEffect(() => {
         if (isTrading) {
             voteLoop = setInterval(() => {
-                console.log("Voting")
                 const randomBoolean = Math.random() >= 0.5;
                 handleVote(randomBoolean ? "yes" : "no")
             }, 3000);
@@ -88,13 +94,21 @@ export default function DiscoverPage()
         // setSelectedPoll(pollId)
         setDisableInput(true)
         setAnimation(vote)
+        setSkipToNext(!skipToNext)
         
         // Reset animation after 1 second
         await new Promise(resolve => setTimeout(resolve, 1000))
         setAnimation(null)
-        setSkipToNext(!skipToNext)
         await new Promise(resolve => setTimeout(resolve, 1500))
         setDisableInput(false)
+    }
+
+    const tradeAmountInput = useRef<HTMLInputElement>(null)
+    const setTradeAmount = (amount:number) => {
+        if(!tradeAmountInput.current)
+            return
+        
+        tradeAmountInput.current.value = amount.toString()
     }
 
     return(
@@ -141,10 +155,10 @@ export default function DiscoverPage()
                     )}
                 </AnimatePresence>
                 <div className={`h-full transition-all duration-300 w-full overflow-hidden ${isTrading ? "pointer-events-none" : ""}`}>
-                    <CardWallet isExpanded={isExpanded} skipToNext={skipToNext} autoplayIsPlaying={isTrading} onClick={onPollClick} onPollSelected={onPollSelected}/>
+                    <CardWallet barsHidden={barsHidden} onScroll={onScroll} isExpanded={isExpanded} skipToNext={skipToNext} autoplayIsPlaying={isTrading} onClick={onPollClick} onPollSelected={onPollSelected}/>
                 </div>
             </div>
-            <div className="absolute bottom-2 bg-background w-[90%] md:w-[60%] h-16 -translate-x-1/2 -translate-y-1/2 left-1/2 rounded-xl p-4 flex gap-4 justify-between items-center">
+            <div className="absolute -bottom-2 md:bottom-8 bg-background w-full md:w-[60%] h-20 -translate-x-1/2 left-1/2 rounded-xl p-4 flex gap-4 justify-between items-center">
                 <AnimatePresence>
                     {animation && (
                         <motion.div
@@ -166,6 +180,26 @@ export default function DiscoverPage()
                         </motion.div>
                     )}
                 </AnimatePresence>
+                <div className="flex flex-row gap-1 items-center">
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline" size="icon">
+                                <Settings className="h-4 w-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-fit">
+                            <div className="flex flex-row gap-2">
+                                <Button onClick={() => setTradeAmount(5)}>5$</Button>
+                                <Button onClick={() => setTradeAmount(10)}>10$</Button>
+                                <Button onClick={() => setTradeAmount(15)}>15$</Button>
+                                <Button onClick={() => setTradeAmount(20)}>20$</Button>
+                                <Button onClick={() => setTradeAmount(25)}>25$</Button>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                    <Input ref={tradeAmountInput} className="w-[56px]" type="number" defaultValue={1} onChange={(e) => {if(e.target.valueAsNumber > 9999) setTradeAmount(9999)}}/>
+                    <Label>$</Label>
+                </div>
                 <div className="flex flex-row gap-3 w-full">
                     <motion.button
                         disabled={isTrading || disableInput}
@@ -188,7 +222,7 @@ export default function DiscoverPage()
                 </div>
                 <Popover>
                     <PopoverTrigger>
-                        <ShimmerButton shimmerSize={isTrading ? "0.05em" : "-2em"} shimmerDuration={isTrading ? "1s" : "0s"} borderRadius="15px" className="w-10 h-10">
+                        <ShimmerButton shimmerSize={isTrading ? "0.05em" : "-2em"} shimmerDuration={isTrading ? "1s" : "0s"} className="rounded-lg">
                             <h1 className="z-20 text-white font-gilroy">AI</h1>
                         </ShimmerButton>
                     </PopoverTrigger>

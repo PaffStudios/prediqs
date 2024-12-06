@@ -25,12 +25,12 @@ export default function WalletComponent() {
     return (
         <div>
 
-            <Button onClick={() => setIsPopupOpen(true)}>Connect Wallet</Button>
+            <Button className="bg-gradient-to-r from-[#34028A] to-[#6624FF] text-white" onClick={() => setIsPopupOpen(true)}>Connect Wallet</Button>
             {walletAddress && (
                 <div>
                     <p className="mb-4">Connected Wallet: {walletAddress}</p>
                     <p className="mb-4">User ID: {user?.id}</p>
-                    <Button onClick={handleDisconnect}>Disconnect</Button>
+                    <Button className="bg-gradient-to-r from-[#34028A] to-[#6624FF] text-white" onClick={handleDisconnect}>Disconnect</Button>
                 </div>
             )}
 

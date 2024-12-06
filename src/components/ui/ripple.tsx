@@ -34,7 +34,7 @@ const Ripple = React.memo(function Ripple({
         return (
           <div
             key={i}
-            className={`absolute animate-ripple rounded-full shadow-xl border [--i:${i}] transition-all duration-1000 ${rippleColor == "white" ? "bg-slate-500/20" : "bg-"+rippleColor+"-500"}`}
+            className={`absolute animate-ripple rounded-full shadow-xl border [--i:${i}] transition-all duration-1000 ${rippleColor == "white" ? "bg-slate-500" : "bg-"+rippleColor+"-500"}`}
             style={
               {
                 width: `${size}px`,
