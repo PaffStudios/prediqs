@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
   EmblaCarouselType,
 } from "embla-carousel"
@@ -21,6 +21,7 @@ interface PollCard {
     participants: number
     starred?: boolean
     positive: boolean
+    uv: {uv: string}[]
   }
 
   const titles = ['Will OpenAI release GPT-5 to the public before January 2025?', 
@@ -40,16 +41,7 @@ interface PollCard {
     'Will a major central bank launch its own cryptocurrency by 2025?',
     'Will Solana become one of the top 3 cryptocurrencies by market cap by 2025?',
     'Will the total cryptocurrency market cap exceed $5 trillion by 2025?'];
-  const polls: PollCard[] = Array.from({ length: 4 }).map((_, i) => ({
-    id: String(i + 1),
-    question: titles[Math.floor(Math.random() * titles.length)],
-    image: faker.image.avatar(),
-    chance: faker.number.int({max:100}),
-    volume: Number(faker.finance.amount({min:0, max:99})),
-    participants: faker.number.int({max:1000}),
-    starred: faker.datatype.boolean(),
-    positive: faker.datatype.boolean()
-  }))
+  
 
   interface CardSliderProps {
     onClick: () => void
@@ -73,6 +65,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
   }, [Autoplay({playOnInit:false, delay: 3000})])
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
+  const [data, setData] = useState<PollCard[]>([]);
 
   const { toggleAutoplay } =
     useAutoplay(emblaApi)
@@ -201,15 +194,27 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     }
   }, [emblaApi, setTweenNodes, setTweenFactor, tweenScale, props.onScroll, props.onPollSelected])
 
-  const areaChartData = Array.from({ length: 15 }, () => ({
-    uv: faker.finance.amount({ min: 4000, max: 9000 }),
-  }));
+  useEffect(() => {
+    setData(Array.from({ length: 12 }).map((_, i) => ({
+      id: String(i + 1),
+      question: titles[Math.floor(Math.random() * titles.length)],
+      image: faker.image.avatar(),
+      chance: faker.number.int({max:100}),
+      volume: Number(faker.finance.amount({min:0, max:99})),
+      participants: faker.number.int({max:1000}),
+      starred: faker.datatype.boolean(),
+      positive: faker.datatype.boolean(),
+      uv: Array.from({ length: 15 }, () => ({
+        uv: faker.finance.amount({ min: 4000, max: 9000 }),
+      }))
+    })))
+  }, [])
 
   return (
     <div className="h-screen w-full px-4 grid place-items-center select-none">
       <div className="relative h-[500px] w-full" ref={emblaRef}>
         <div className="h-full">
-          {polls.map((poll, index) => (
+          {data.map((poll, index) => (
             <div
               key={index}
               className="relative h-64 w-full shrink-0"
@@ -228,7 +233,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="w-full h-full absolute left-0 bottom-0 overflow-hidden rounded-3xl -z-10">
                     <ResponsiveContainer width="120%">
-                      <AreaChart data={areaChartData}
+                      <AreaChart data={poll.uv}
                         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                         <defs>
                           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -256,7 +261,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
                   <div className="flex items-center gap-3 flex-grow w-[60%]">
                       <Image
                       src={poll.image}
-                      alt="Crypto icon"
+                      alt=""
                       width={48}
                       height={48}
                       className="rounded-xl bg-gray-700 p-2"

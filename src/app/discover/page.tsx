@@ -129,7 +129,7 @@ export default function DiscoverPage()
                             exit={{ opacity: 0}} 
                             transition={{ duration: 1}}
                             className={`absolute top-0 left-0 w-screen h-screen z-0}`}>
-                            {Array.from({ length: 50 }, (_, i) => (
+                            {Array.from({ length: 25 }, (_, i) => (
                                <motion.div key={i}>
                                     {animation === "yes" ? (
                                         <motion.div
@@ -181,7 +181,7 @@ export default function DiscoverPage()
                 </AnimatePresence>
                 <div className="flex flex-row gap-1 items-center">
                     <Popover>
-                        <PopoverTrigger>
+                        <PopoverTrigger asChild>
                             <Button variant="outline" size="icon">
                                 <Settings className="h-4 w-4" />
                             </Button>
@@ -220,7 +220,7 @@ export default function DiscoverPage()
                     </motion.button>
                 </div>
                 <Popover>
-                    <PopoverTrigger>
+                    <PopoverTrigger asChild>
                         <ShimmerButton shimmerSize={isTrading ? "0.05em" : "-2em"} shimmerDuration={isTrading ? "1s" : "0s"} className="rounded-lg">
                             <h1 className="z-20 text-white font-gilroy">AI</h1>
                         </ShimmerButton>

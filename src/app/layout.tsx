@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { ThemeProvider } from "@/utils/providers/theme-provider";
 import localFont from 'next/font/local'
 import { Toaster } from "@/components/ui/toaster"
+import { faker } from "@faker-js/faker";
 
 export const metadata: Metadata = {
   title: "Prediqs",
@@ -34,6 +35,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  faker.seed(31)
   return (
     <html className={gilroy.variable} lang="en" suppressHydrationWarning>
       <body>
