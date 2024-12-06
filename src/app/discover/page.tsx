@@ -182,7 +182,7 @@ export default function DiscoverPage()
                     )}
                 </AnimatePresence>
                 <div className={`h-full transition-all duration-300 w-full overflow-hidden ${isTrading ? "pointer-events-none" : ""}`}>
-                    <CardWallet barsHidden={barsHidden} onScroll={onScroll} isExpanded={isExpanded} skipToNext={skipToNext} autoplayIsPlaying={isTrading} onClick={onPollClick} onPollSelected={onPollSelected}/>
+                    <CardWallet isMobile={isMobile} barsHidden={barsHidden} onScroll={onScroll} isExpanded={isExpanded} skipToNext={skipToNext} autoplayIsPlaying={isTrading} onClick={onPollClick} onPollSelected={onPollSelected}/>
                 </div>
             </div>
             <div className="absolute -bottom-2 md:bottom-8 bg-background w-full md:w-[60%] h-32 md:h-20 -translate-x-1/2 left-1/2 rounded-xl p-4 flex gap-4 justify-between items-center">
