@@ -40,7 +40,21 @@ interface PollCard {
     'Will a new social media platform surpass TikTok in daily users by 2025?',
     'Will a major central bank launch its own cryptocurrency by 2025?',
     'Will Solana become one of the top 3 cryptocurrencies by market cap by 2025?',
-    'Will the total cryptocurrency market cap exceed $5 trillion by 2025?'];
+    'Will the total cryptocurrency market cap exceed $5 trillion by 2025?',
+    'Will SpaceX conduct a crewed mission to Mars in the future?',
+    'Will a universal cancer vaccine receive FDA approval in the coming years?',
+    'Will a major breakthrough in nuclear fusion happen soon?',
+    'Will AI eventually surpass human performance in all Olympic sports simulations?',
+    'Will Meta decide to rebrand Facebook again in the near future?',
+    'Will Netflix add live sports streaming in the future?',
+    'Will the United Nations create a global framework for AI governance in the future?',
+    'Will Tesla release a fully autonomous vehicle to the public in the coming years?',
+    'Will China overtake the United States as the world’s largest economy in the future?',
+    'Will humans regrow limbs using advanced bioprinting technology in the years ahead?',
+    'Will any country announce plans to completely ban fossil fuel vehicles in the future?',
+    'Will an AI-powered court system be introduced somewhere in the world soon?',
+    'Will a global city face mass evacuation due to climate-related disasters in the future?',
+    'Will a new pandemic require global lockdown measures in the coming years?',];
   
 
   interface CardSliderProps {
