@@ -37,6 +37,8 @@ export default function DiscoverPage()
 
     const isMobile = useMediaQuery({ maxWidth: 768 })
 
+    const [credit, setCredit] = useState<number>(6852)
+
     const onPollSelected = useCallback(
         () => {
             setBarsHidden(true)
@@ -70,6 +72,7 @@ export default function DiscoverPage()
         setDisableInput(true)
         setAnimation(vote)
         setSkipToNext(!skipToNext)
+        setCredit(credit - Math.floor(Math.random() * 100))
         
         // Reset animation after 1 second
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -226,8 +229,11 @@ export default function DiscoverPage()
                                 </div>
                             </PopoverContent>
                         </Popover>
-                        <Input ref={tradeAmountInput} className="w-[56px] px-2" type="number" defaultValue={1} onChange={(e) => {if(e.target.valueAsNumber > 9999) setTradeAmount(9999)}}/>
-                        <Label className="right-2 absolute translate-y-[1px] text-center">$</Label>
+                        <div className="flex flex-row relative items-center">
+                            <Input ref={tradeAmountInput} className="w-[60px]" type="number" defaultValue={1} onChange={(e) => {if(e.target.valueAsNumber > 9999) setTradeAmount(9999)}}/>
+                            <Label className="right-2 absolute text-center">$</Label>
+                        </div>
+                        <span className="text-xs">Wallet<br/>{credit}$</span>
                     </div>
                     <div className="flex flex-row gap-3 w-full">
                         <motion.button
@@ -338,8 +344,11 @@ export default function DiscoverPage()
                                         </div>
                                     </PopoverContent>
                                 </Popover>
-                                <Input ref={tradeAmountInput} className="w-[56px] px-2" type="number" defaultValue={1} onChange={(e) => {if(e.target.valueAsNumber > 9999) setTradeAmount(9999)}}/>
-                                <Label className="right-2 absolute translate-y-[1px] text-center">$</Label>
+                                <div className="flex flex-row relative items-center">
+                                    <Input ref={tradeAmountInput} className="w-[60px]" type="number" defaultValue={1} onChange={(e) => {if(e.target.valueAsNumber > 9999) setTradeAmount(9999)}}/>
+                                    <Label className="right-2 absolute text-center">$</Label>
+                                </div>
+                                <span className="text-xs">Wallet<br/>{credit}$</span>
                             </div>
                             <Popover>
                                 <PopoverTrigger asChild>
