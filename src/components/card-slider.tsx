@@ -5,8 +5,6 @@ import {
 } from "embla-carousel"
 import useEmblaCarousel from "embla-carousel-react"
 import { BarChart3, Star, Users } from 'lucide-react'
-import Autoplay from "embla-carousel-autoplay"
-import { useAutoplay } from "./ui/embla-carousel-autoplay"
 import Image from "next/image"
 import TradingView from "@/components/trading-view";
 import { faker } from "@faker-js/faker"
@@ -59,11 +57,10 @@ interface PollCard {
 
   interface CardSliderProps {
     onClick: () => void
-    skipToNext: boolean
+    skipToNext: number
     onPollSelected: (element:EmblaCarouselType) => void
     onScroll: () => void
     barsHidden: boolean
-    autoplayIsPlaying: boolean
     isExpanded: boolean
     isMobile: boolean
   }
@@ -77,20 +74,12 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     loop: true,
     skipSnaps: true,
     align: 'center',
-  }, [Autoplay({playOnInit:false, delay: 3000})])
+  })
   const tweenFactor = useRef(0)
   const tweenNodes = useRef<HTMLElement[]>([])
   const [data, setData] = useState<PollCard[]>([]);
 
-  const { toggleAutoplay } =
-    useAutoplay(emblaApi)
-
   useEffect(() => {
-    toggleAutoplay(props.autoplayIsPlaying)
-  }, [props.autoplayIsPlaying, toggleAutoplay])
-
-  useEffect(() => {
-    // console.log("skipToNext")
     if (emblaApi) {
       emblaApi.scrollNext()
     }
@@ -171,7 +160,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
           const rotate = Math.max(-5, Math.min((1 - tweenValue) * 12, 5))
 
           // Apply rotation only if not the center element
-          if (Math.abs(diffToTarget) > 0.01) {
+          if (Math.abs(diffToTarget) > 0.02) {
             tweenNode.style.transform = `scale(${scale}) rotate(${rotate}deg)`
           } else {
             tweenNode.style.transform = `scale(${scale})`
@@ -190,6 +179,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
     setTweenNodes(emblaApi)
     setTweenFactor(emblaApi)
     tweenScale(emblaApi)
+    props.onPollSelected(emblaApi)
 
     emblaApi
       .on("reInit", setTweenNodes)
