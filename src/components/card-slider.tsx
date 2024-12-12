@@ -90,7 +90,7 @@ const CardWallet: React.FC<CardSliderProps> = (props:CardSliderProps) => {
   }, [props.autoplayIsPlaying, toggleAutoplay])
 
   useEffect(() => {
-    console.log("skipToNext")
+    // console.log("skipToNext")
     if (emblaApi) {
       emblaApi.scrollNext()
     }
