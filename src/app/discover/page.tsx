@@ -38,7 +38,7 @@ export default function DiscoverPage()
     const isMobile = useMediaQuery({ maxWidth: 768 })
 
     const [credit, setCredit] = useState<number>(6852)
-    const [tradeCredit, setTradeCredit] = useState<number>(0)
+    const [tradeCredit, setTradeCredit] = useState<number>(1)
 
     const onPollSelected = useCallback(
         () => {
