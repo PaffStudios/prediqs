@@ -38,6 +38,7 @@ export default function DiscoverPage()
     const isMobile = useMediaQuery({ maxWidth: 768 })
 
     const [credit, setCredit] = useState<number>(6852)
+    const [tradeCredit, setTradeCredit] = useState<number>(0)
 
     const onPollSelected = useCallback(
         () => {
@@ -72,7 +73,8 @@ export default function DiscoverPage()
         setDisableInput(true)
         setAnimation(vote)
         setSkipToNext(!skipToNext)
-        setCredit(credit - Math.floor(Math.random() * 100))
+        const newCredit = credit - (isTrading ? Math.max(minTradePrice, Math.floor(Math.random() * maxTradePrice)) : tradeCredit)
+        setCredit(newCredit)
         
         // Reset animation after 1 second
         await new Promise(resolve => setTimeout(resolve, 1000))
@@ -101,7 +103,7 @@ export default function DiscoverPage()
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isTrading]);
+    }, [isTrading, credit]);
 
     const handleMaxTradePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMaxTradePrice(parseInt(e.currentTarget.value, 10))
@@ -116,6 +118,7 @@ export default function DiscoverPage()
         if(!tradeAmountInput.current)
             return
         
+        setTradeCredit(amount)
         tradeAmountInput.current.value = amount.toString()
     }
 
