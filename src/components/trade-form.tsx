@@ -14,7 +14,7 @@ const TradeForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle form submission
-    console.log({ outcome, tradeType, limitPrice, shares })
+    // console.log({ outcome, tradeType, limitPrice, shares })
   }
 
   return (

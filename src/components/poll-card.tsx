@@ -77,16 +77,16 @@ export default function PollCard({ id, title, image, rewardRate, movement, isPos
               <div className="text-sm text-zinc-400 font-gilroy font-semibold">Reward Rate</div>
               <div className="text-3xl font-bold text-zinc-100">{rewardRate}%</div>
               <div className="flex items-center gap-1">
-                <span className={`text-sm ${isPositive ? "text-green-600" : "text-red-600"}`}>{isPositive ? "↑" : "↓"} {movement}%</span>
+                <span className={`text-sm ${isPositive ? "text-green-900" : "text-red-900"}`}>{isPositive ? "↑" : "↓"} {movement}%</span>
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4 px-0 py-0 relative">
             <div className="flex flex-row w-full gap-2">
-              <Button variant="outline" className="w-full bg-green-500 hover:bg-green-600 font-gilroy font-bold select-none">
+              <Button variant="outline" className="w-full text-green-500 hover:text-green-600 font-gilroy font-bold select-none">
                 Buy Long
               </Button>
-              <Button variant="outline" className="w-full bg-red-500 hover:bg-red-600 font-gilroy font-bold select-none">
+              <Button variant="outline" className="w-full text-red-500 hover:text-red-600 font-gilroy font-bold select-none">
                 Buy Short
               </Button>
             </div>

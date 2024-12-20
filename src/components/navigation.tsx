@@ -56,7 +56,7 @@ const Navigation: React.FC = () => {
           {isMobile ? (
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="lg" className="md:hidden p-0">
+                <Button aria-label="navigation-dropdown" variant="ghost" size="lg" className="md:hidden p-0">
                   <Menu className="!h-8 !w-8"/>
                 </Button>
               </SheetTrigger>

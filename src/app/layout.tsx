@@ -38,7 +38,7 @@ export default function RootLayout({
   faker.seed(31)
   return (
     <html className={gilroy.variable} lang="en" suppressHydrationWarning>
-      <body>
+      <body className="max-w-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

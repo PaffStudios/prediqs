@@ -120,7 +120,7 @@ export default function Home() {
     return null
   }
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Categories Bar */}
       <Categories />
 

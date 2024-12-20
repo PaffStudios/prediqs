@@ -120,7 +120,7 @@ export default function DiscoverPage() {
 
   const stopTradingRef = useRef(false);
   const startTrading = useCallback(async () => {
-    console.log("Trading started");
+    // console.log("Trading started");
     setIsTrading(true);
     stopTradingRef.current = false;
 
@@ -132,7 +132,7 @@ export default function DiscoverPage() {
     //   console.log("TRADING");
       try {
         const currentQuestion = latestQuestionRef.current;
-        console.log("CURRENT QUESTION: " + currentQuestion);
+        // console.log("CURRENT QUESTION: " + currentQuestion);
         const answer = await chain.invoke({
           input: currentQuestion,
         });
@@ -155,7 +155,7 @@ export default function DiscoverPage() {
   }, [chain, handleVote]);
 
   const stopTrading = useCallback(() => {
-    console.log("Stopping trading");
+    // console.log("Stopping trading");
     setIsTrading(false);
     stopTradingRef.current = true;
     setAnimation(null);
@@ -168,7 +168,7 @@ export default function DiscoverPage() {
   }, []);
 
   useEffect(() => {
-    console.log("isTrading changed:", isTrading);
+    // console.log("isTrading changed:", isTrading);
   }, [isTrading]);
 
   useEffect(() => {
